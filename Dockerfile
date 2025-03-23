@@ -28,8 +28,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of your application
 COPY . .
 
-# Build the CSS with Tailwind
-RUN npm run build:css
+## Build the CSS with Tailwind
+#RUN npm run build:css
 
 # Expose the port your app runs on (change if needed)
 EXPOSE 5000
