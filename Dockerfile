@@ -6,18 +6,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json (if available)
-COPY package.json package*.json ./
-
-# Install Node.js dependencies
-RUN npm install
 
 # Copy Python requirements (if you have them)
 COPY requirements.txt ./
