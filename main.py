@@ -9,7 +9,7 @@ hdrs = (
     Link(rel="stylesheet", href="/static/output.css", type="text/css"),
 )
 
-app, rt = fast_app(hdrs=hdrs, htmlkw={"data-theme": "fantasy"}, pico=False, live=False)
+app, rt = fast_app(hdrs=hdrs, pico=False, live=False)
 
 def meditation_button(additional_classes=""):
     """Helper function to avoid button style duplication"""
@@ -25,22 +25,22 @@ def get_homepage():
                 Div(cls="mt-16 relative w-full flex flex-col items-center justify-center")(
                     Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/meditation-desktop.png', alt="mfi-desktop"),
                     Img(cls="w-98 md:hidden", src='static/img/meditation-mobile.png', alt="mfi-mobile"),
-                    H1(cls="absolute text-center text-4xl -top-5 ml-3.5 md:text-5xl md:top-6 md:mt-18 md:-mr-1 font-heading")(
+                    H1(cls="absolute text-[#004552] text-center text-4xl -top-5 ml-3.5 md:text-[64px] md:top-4 md:mt-18 md:-mr-12 font-heading")(
                         "Meditate for India"),
                     Div(cls="absolute flex flex-col text-sm items-center justify-center mt-[9rem] md:mt-80 md:text-xl text-center")(
                         P(cls="text-teal-800 text-center font-sans max-w-prose leading-relaxed md:mt-32")
                             (
-                            Span(cls="block font-heading")("A Free Global 24-Hour Immersion in"),
-                            Span(cls="block font-heading")("Meditation, Pranayama, Asana and Chanting"),
-                            Span(cls="block font-bold pt-1 md:pt-4")("21st June 2025 From: time")
+                            Span(cls="block font-heading md:text-[26px]")("A Free Global 24-Hour Immersion in"),
+                            Span(cls="block font-heading md:text-[26px]")("Meditation, Pranayama, Asana and Chanting"),
+                            Span(cls="block font-bold pt-1 md:text-[24px] md:pt-4")("21st June 2025 From: time")
                         ),
 
-                        meditation_button("hidden md:block mt-4 md:text-base md:w-52")
+                        meditation_button("hidden md:block mt-4 md:text-[14px] md:w-52")
                     ),
                     meditation_button("block md:hidden mt-4"),
                 ),
 
-                Div(cls="mt-16 w-full flex items-center justify-center md:gap-10")(
+                Div(cls="mt-16 w-full flex items-center justify-center gap-4 md:gap-10")(
                     Div(cls="flex flex-col items-center justify-center")(
                         Img(cls="md:w-14 md:m-8 w-6", src='static/img/imagine.svg', alt="mindful")(),
                         P(cls="text-xs md:text-xl text-center text-slate-700")("Reimagining a Mindful India"),
@@ -61,26 +61,26 @@ def get_homepage():
                     Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/meditate-desktop.svg',
                         alt="meditate2.0-desktop"),
                     Img(cls="md:hidden w-60", src='static/img/meditate.svg', alt="meditate2.0-mobile"),
-                    H1(cls="font-heading text-2xl text-center text-[#004552]")("A Movement Rooted in Tradition"),
-                    P(cls="m-2 text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
-                        B("Meditate for India", cls="font-bold font-rest"),
+                    H1(cls="font-heading text-[32px] text-center text-[#004552]")("A Movement Rooted in Tradition"),
+                    P(cls="m-2 text-base md:text-[24px] text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                        B("Meditate for India", cls="font-bold font-rest md:text-[24px]"),
                         " is more than just an event; it is a collective movement to bring India's ancient wisdom into modern life. The first Meditate for India was held during the ",
                         B("COVID-19 pandemic, offering thousands a space for healing, "
                           "resilience, and connection",
-                          cls="font-bold font-rest"),
+                          cls="font-bold font-rest md:text-[24px]"),
                           ),
 
-                    P(cls="m-2 text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                    P(cls="m-2 md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
                         "Now, we come together again not in response to crisis, but as a ",
-                        B("step toward cultivating lasting well-being.", cls="font-bold font-rest"),
+                        B("step toward cultivating lasting well-being.", cls="font-bold font-rest md:text-[24px]"),
                         " Meditation is not just an individual practice; "
                         "it is a shared journey that uplifts communities and strengthens societies."
                     ),
-                    P(cls="m-2 text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                    P(cls="m-2 md:text-[24px] text-base text-center font-rest leading-10 text-[#006478] font-normal")(
                         "This year, Meditate for India will be held ",
-                        B("online and in-person ", cls="font-bold font-rest"),
+                        B("online and in-person ", cls="font-bold font-rest md:text-[24px] leading-10"),
                         " across cities worldwide. Whether you join from ",
-                        B("home, a yoga Shala,", cls="font-bold font-rest"),
+                        B("home, a yoga Shala,", cls="font-bold font-rest md:text-[24px] leading-10"),
                         "or a meditation center, you will be part of a global wave of stillness, breath, and sound."
                     )
 
@@ -101,15 +101,25 @@ def get_homepage():
                 ),
 
                 Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10")(
-                    H1(cls="font-heading text-2xl text-center text-[#004552]")("Wisdom Form Our Speakers"),
-                    P(cls="text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                    H1(cls="font-heading text-2xl md:text-[64px] text-center text-[#004552]")("Wisdom Form Our Speakers"),
+                    P(cls="text-base md:text-2xl text-center font-rest leading-relaxed text-[#006478] font-normal")(
                         "Discover the inspiring teachers and experts who will guide you through mindfulness, inner peace, and self-discovery"
                     )
                 ),
                 Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10")(),
-                Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10 relative")(
+                Div(cls="mt-16 w-full hidden md:flex flex-col items-center justify-center gap-10 relative")(
                     Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/join-us-desktop.png',
                         alt="mfi-desktop"),
+                    H1(cls="absolute text-center text-[64px] font-heading mt-60")("“Join Us”"),
+                    P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-normal mt-100")(
+                        B("Online:"),
+                        " Join live-streamed sessions from anywhere."
+                    ),
+                    P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-normal mt-120")(
+                    B("In-Person:"),
+                    " Attend a gathering at a partner yoga shala or meditation center."
+                    ),
+                    meditation_button("absolute hidden mt-160 md:block md:text-base md:w-52")
                 )
 
             ),
