@@ -21,6 +21,9 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
+# Build CSS
+RUN npm run build:css
+
 # Set environment variable for Python to run in unbuffered mode
 ENV PYTHONUNBUFFERED=1
 
