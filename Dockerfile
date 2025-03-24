@@ -1,31 +1,28 @@
-# Start with a Python base image
+# Use Python 3.11 image
 FROM python:3.11-slim
 
 # Install Node.js and npm
 RUN apt-get update && apt-get install -y \
-    curl \
-    gnupg \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get clean \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy Python requirements (if you have them)
-COPY requirements.txt ./
+# Copy Python requirements and install
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy package.json and install npm dependencies
+COPY package.json .
+RUN npm install
 
-# Copy the rest of your application
+# Copy the rest of the application
 COPY . .
 
-## Build the CSS with Tailwind
-#RUN npm run build:css
+# Set environment variable for Python to run in unbuffered mode
+ENV PYTHONUNBUFFERED=1
 
-# Expose the port your app runs on (change if needed)
-EXPOSE 5000
-
-# Command to run your app
-CMD ["npm", "start"]
+# Command to run the application
+CMD ["python", "main.py"]
