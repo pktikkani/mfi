@@ -61,16 +61,15 @@ def get_homepage():
                     Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/meditate-desktop.svg',
                         alt="meditate2.0-desktop"),
                     Img(cls="md:hidden w-60", src='static/img/meditate.svg', alt="meditate2.0-mobile"),
-                    P(cls="font-heading text-2xl text-center text-[#004552]")("A Movement Rooted in Tradition"),
+                    H1(cls="font-heading text-2xl text-center text-[#004552]")("A Movement Rooted in Tradition"),
                     P(cls="m-2 text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
                         B("Meditate for India", cls="font-bold font-rest"),
                         " is more than just an event; it is a collective movement to bring India's ancient wisdom into modern life. The first Meditate for India was held during the ",
                         B("COVID-19 pandemic, offering thousands a space for healing, "
                           "resilience, and connection",
                           cls="font-bold font-rest"),
-                          cls="font-bold font-rest"),
+                          ),
 
-                    ),
                     P(cls="m-2 text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
                         "Now, we come together again not in response to crisis, but as a ",
                         B("step toward cultivating lasting well-being.", cls="font-bold font-rest"),
@@ -99,12 +98,25 @@ def get_homepage():
                         cls="w-full hidden md:block"
                     ),
 
+                ),
+
+                Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10")(
+                    H1(cls="font-heading text-2xl text-center text-[#004552]")("Wisdom Form Our Speakers"),
+                    P(cls="text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                        "Discover the inspiring teachers and experts who will guide you through mindfulness, inner peace, and self-discovery"
+                    )
+                ),
+                Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10")(),
+                Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10 relative")(
+                    Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/join-us-desktop.png',
+                        alt="mfi-desktop"),
                 )
 
+            ),
 
         )
 
-)
+    )
 
 
 
