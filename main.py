@@ -42,17 +42,17 @@ def get_homepage():
 
                 Div(cls="mt-16 w-full flex items-center justify-center gap-4 md:gap-10")(
                     Div(cls="flex flex-col items-center justify-center")(
-                        Img(cls="md:w-14 md:m-8 w-6", src='static/img/imagine.svg', alt="mindful")(),
+                        Img(cls="md:w-14 md:m-8 w-6 mt-4", src='static/img/imagine-desktop.png', alt="imagine")(),
                         P(cls="text-xs md:text-xl text-center text-slate-700")("Reimagining a Mindful India"),
                         P(cls="text-xs m-2 md:text-lg text-slate-600 text-center")("पुनर्निर्मिं मः मनस्वी भारतम्")
                     ),
                     Div(cls="flex flex-col items-center justify-center")(
-                        Img(cls="md:w-14 md:m-8 w-6", src='static/img/celebrate.svg', alt="celebrate")(),
+                        Img(cls="md:w-14 md:m-8 w-6", src='static/img/celebrate-desktop.png', alt="celebrate")(),
                         P(cls="text-xs md:text-xl text-center text-slate-700")("Celebrating Our Heritage"),
                         P(cls="text-xs md:text-lg text-slate-600 text-center m-2")("उत्सवामः स्वधर्म मंम")
                     ),
                     Div(cls="flex flex-col items-center justify-center")(
-                        Img(cls="md:w-14 md:m-8 w-6", src='static/img/cultivate.svg', alt="cultivate"),
+                        Img(cls="md:w-14 md:m-8 w-6", src='static/img/cultivate-desktop.png', alt="cultivate")(),
                         P(cls=" text-xs md:text-xl text-center text-slate-700")("Cultivating Inner Wisdom"),
                         P(cls="text-xs md:text-lg text-slate-600 text-center m-2")("पालयामः अन्तःप्रज्ञाम्")
                     ),
@@ -76,11 +76,11 @@ def get_homepage():
                         " Meditation is not just an individual practice; "
                         "it is a shared journey that uplifts communities and strengthens societies."
                     ),
-                    P(cls="m-2 md:text-[24px] text-base text-center font-rest leading-10 text-[#006478] font-normal")(
+                    P(cls="m-2 md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
                         "This year, Meditate for India will be held ",
-                        B("online and in-person ", cls="font-bold font-rest md:text-[24px] leading-10"),
+                        B("online and in-person ", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
                         " across cities worldwide. Whether you join from ",
-                        B("home, a yoga Shala,", cls="font-bold font-rest md:text-[24px] leading-10"),
+                        B("home, a yoga Shala,", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
                         "or a meditation center, you will be part of a global wave of stillness, breath, and sound."
                     )
 
