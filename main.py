@@ -123,13 +123,67 @@ def get_homepage():
                         ),
 
                     ),
-                    Div(cls="mt-16 w-full flex flex-col items-center justify-center gap-10")(
+                    Div(cls="mt-16 w-384px md:w-[994px] flex flex-col items-center justify-center gap-10")(
                         H1(cls="font-heading text-2xl md:text-[64px] text-center text-[#004552]")(
                             "Wisdom Form Our Speakers"),
-                        P(cls="text-base md:text-2xl text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                        P(cls="text-2xl text-center font-rest leading-relaxed text-[#006478] font-[400px]")(
                             "Discover the inspiring teachers and experts who will guide you through mindfulness, inner peace, and self-discovery"
                         )
                     ),
+
+                    # Div(cls="mt-16 w-[384px] md:w-[1552px] md:flex flex-col items-center justify-center relative")(
+                    #     Div(
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] hidden lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         cls="grid grid-cols-3 lg:grid-cols-4 gap-6 md:gap-15"
+                    #     ),
+                    #
+                    #     # Second row - 3 cols on large screens, 2 cols on smaller screens
+                    #     Div(
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                    #             cls="flex justify-center"),
+                    #         cls="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-15"
+                    #     ),
+                    # ),
+
+                    Div(cls="mt-40 w-[384px] md:w-[1552px]")(
+                        # First row - 3 cols on small screens, 4 cols on large screens
+                        Div(cls="grid grid-cols-3 lg:grid-cols-4")(
+                            # First 3 speakers (visible on all screens)
+                            *[Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                                  cls="flex justify-center")
+                              for _ in range(3)],
+
+                            # 4th speaker (only visible on large screens)
+                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                                cls="hidden lg:flex justify-center"),
+                        ),
+
+                        # Second row (flex container with justify-center for small screens)
+                        Div(cls="flex flex-wrap justify-center lg:grid lg:grid-cols-3")(
+                            # On small screens, these 2 items will be centered
+                            # On large screens, they'll be part of a 3-column grid
+                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                                cls="flex justify-center lg:mx-0"),
+                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                                cls="flex justify-center lg:mx-0"),
+
+                            # 3rd speaker in second row (only visible on large screens)
+                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
+                                cls="hidden lg:flex justify-center"),
+                        ),
+                    ),
+
                     Div(cls="mt-16 w-full hidden md:flex flex-col items-center justify-center gap-10 relative")(
                         Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/join-us-desktop.png',
                             alt="mfi-desktop"),
@@ -143,7 +197,9 @@ def get_homepage():
                             " Attend a gathering at a partner yoga shala or meditation center."
                         ),
                         meditation_button("absolute hidden mt-160 md:block md:text-base md:w-52")
-                    )
+                    ),
+
+
                 ),
 
             ),
