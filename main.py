@@ -40,10 +40,6 @@ def get_homepage():
 
         Body()(
             Main(
-                # Navigation bar with bottom shadow
-                # Navigation bar - desktop only with proper alignment
-                # Navigation bar with extreme left and right positioning
-                # Navigation bar with extreme left and right positioning
 
                 navbar,
                 Div(cls="w-full flex flex-col items-center justify-center mt-16")(
@@ -51,7 +47,7 @@ def get_homepage():
                     Div(cls="relative w-full flex flex-col items-center justify-center")(
                         Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/meditation-desktop.png',
                             alt="mfi-desktop"),
-                        Img(cls="w-98 md:hidden", src='static/img/meditation-mobile.png', alt="mfi-mobile"),
+                        Img(cls="w-98 md:hidden", src='static/img/meditation-desktop.png', alt="mfi-mobile"),
                         H1(cls="absolute text-[#004552] text-center text-4xl -top-5 ml-3.5 md:text-[64px] md:top-4 md:mt-18 md:-mr-12 font-heading")(
                             "Meditate for India"),
                         Div(cls="absolute flex flex-col text-sm items-center justify-center mt-[9rem] md:mt-80 md:text-xl text-center")(
