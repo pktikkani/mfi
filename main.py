@@ -17,11 +17,35 @@ def meditation_button(additional_classes=""):
     return Button(cls=f"{base_classes} {additional_classes}")("Join Meditate for India")
 
 
+
+navbar = Nav(cls="hidden bg-[#F4F8F9] shadow-sm py-4 md:flex border-0")(
+        Div(cls="mt-6 container m-0 flex justify-between min-w-full")(
+            # Left navigation items
+            Div(cls="px-6 flex bg-[#F4F8F9] space-x-8 ")(
+                A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+                A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+                A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+                A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+                A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+            ),
+            # Login link
+            A("Login/ Sign up", href="#", cls="text-gray-800 hover:text-blue-600 font-medium px-6")
+        )
+    )
+
+
 @rt("/")
 def get_homepage():
     return (
+
         Body()(
             Main(
+                # Navigation bar with bottom shadow
+                # Navigation bar - desktop only with proper alignment
+                # Navigation bar with extreme left and right positioning
+                # Navigation bar with extreme left and right positioning
+
+                navbar,
                 Div(cls="w-full flex flex-col items-center justify-center mt-16")(
 
                     Div(cls="relative w-full flex flex-col items-center justify-center")(
@@ -126,61 +150,63 @@ def get_homepage():
                     Div(cls="mt-16 w-384px md:w-[994px] flex flex-col items-center justify-center gap-10")(
                         H1(cls="font-heading text-2xl md:text-[64px] text-center text-[#004552]")(
                             "Wisdom Form Our Speakers"),
-                        P(cls="text-2xl text-center font-rest leading-relaxed text-[#006478] font-[400px]")(
+                        P(cls="md:text-2xl text-[16px] text-center font-rest leading-relaxed text-[#006478] font-[400px]")(
                             "Discover the inspiring teachers and experts who will guide you through mindfulness, inner peace, and self-discovery"
                         )
                     ),
 
-                    # Div(cls="mt-16 w-[384px] md:w-[1552px] md:flex flex-col items-center justify-center relative")(
-                    #     Div(
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] hidden lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         cls="grid grid-cols-3 lg:grid-cols-4 gap-6 md:gap-15"
-                    #     ),
-                    #
-                    #     # Second row - 3 cols on large screens, 2 cols on smaller screens
-                    #     Div(
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                    #             cls="flex justify-center"),
-                    #         cls="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-15"
-                    #     ),
-                    # ),
+                    # Speakers section
+                    Div(cls="mt-40 container mx-auto px-4")(
+                        # Desktop layout (7 speakers) - hidden on mobile
+                        Div(cls="hidden md:block")(
+                            # First row - 4 speakers
+                            Div(cls="grid grid-cols-4 gap-8 mb-8")(
+                                *[Div(cls="flex flex-col items-center")(
+                                    Div(cls="w-44 h-44 rounded-full overflow-hidden mb-4")(
+                                        Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
+                                    ),
+                                    P(cls="text-center font-[500px] text-xl text-[#006478] mb-1")("Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-lg text-[#006478]")("Yoga Coach")
+                                ) for _ in range(4)],
+                            ),
 
-                    Div(cls="mt-40 w-[384px] md:w-[1552px]")(
-                        # First row - 3 cols on small screens, 4 cols on large screens
-                        Div(cls="grid grid-cols-3 lg:grid-cols-4")(
-                            # First 3 speakers (visible on all screens)
-                            *[Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                                  cls="flex justify-center")
-                              for _ in range(3)],
-
-                            # 4th speaker (only visible on large screens)
-                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                                cls="hidden lg:flex justify-center"),
+                            # Second row - 3 speakers (centered)
+                            Div(cls="grid grid-cols-3 gap-8 mx-auto w-3/4")(
+                                *[Div(cls="flex flex-col items-center")(
+                                    Div(cls="w-44 h-44 rounded-full overflow-hidden mb-4")(
+                                        Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
+                                    ),
+                                    P(cls="text-center font-[500px] text-xl text-[#006478] mb-1")("Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-lg text-[#006478]")("Yoga Coach")
+                                ) for _ in range(3)],
+                            ),
                         ),
 
-                        # Second row (flex container with justify-center for small screens)
-                        Div(cls="flex flex-wrap justify-center lg:grid lg:grid-cols-3")(
-                            # On small screens, these 2 items will be centered
-                            # On large screens, they'll be part of a 3-column grid
-                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                                cls="flex justify-center lg:mx-0"),
-                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                                cls="flex justify-center lg:mx-0"),
+                        # Mobile layout (5 speakers) - hidden on desktop
+                        Div(cls="md:hidden")(
+                            # First row - 3 speakers
+                            Div(cls="flex justify-center gap-2 mb-4")(
+                                *[Div(cls="flex flex-col items-center")(
+                                    Div(cls="w-24 h-24 rounded-full overflow-hidden mb-2")(
+                                        Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
+                                    ),
+                                    P(cls="text-center font-[500px] text-sm text-[#006478] mb-0.5")(
+                                        "Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-xs text-[#006478]")("Yoga Coach")
+                                ) for _ in range(3)],
+                            ),
 
-                            # 3rd speaker in second row (only visible on large screens)
-                            Div(Img(src="static/img/speaker.png", cls="w-[60px] lg:w-[180px] h-auto object-cover"),
-                                cls="hidden lg:flex justify-center"),
+                            # Second row - 2 speakers (centered)
+                            Div(cls="flex justify-center gap-2")(
+                                *[Div(cls="flex flex-col items-center")(
+                                    Div(cls="w-24 h-24 rounded-full overflow-hidden mb-2")(
+                                        Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
+                                    ),
+                                    P(cls="text-center font-[500px] text-sm text-[#006478] mb-0.5")(
+                                        "Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-xs text-[#006478]")("Yoga Coach")
+                                ) for _ in range(2)],
+                            ),
                         ),
                     ),
 
@@ -199,6 +225,62 @@ def get_homepage():
                         meditation_button("absolute hidden mt-160 md:block md:text-base md:w-52")
                     ),
 
+                    # Footer section with shadow at the top
+                    Div(cls="mt-16 hidden md:block w-full bg-[#F4F8F9] py-10 relative")(
+                        # Shadow element positioned at the top of the footer
+                        Div(cls="absolute top-0 left-0 right-0 h-4 shadow-[0_-2px_4px_rgba(0,0,0,0.1)] pointer-events-none"),
+
+                        Div(cls="container mx-auto px-4 flex flex-col md:flex-row justify-between")(
+                            # Left column - Brand and tagline
+                            Div(cls="mb-8 md:mb-0")(
+                                H2(cls="text-xl font-medium mb-2")("The Mindful Initiative | Ashtanga Yoga"),
+                                P(cls="text-gray-700")("Helping People to be more Mindful and Compassionate Since 2017")
+                            ),
+
+                            # Center column - Contact information
+                            Div(cls="mb-8 md:mb-0")(
+                                H3(cls="text-lg font-medium mb-4")("Contact"),
+                                P(cls="flex items-center mb-2")(
+                                    Span(cls="mr-2")("✉️"), "info@themindfulinitiative.com"
+                                ),
+                                P(cls="flex items-center mb-2")(
+                                    Span(cls="mr-2")("📞"), "+91 9535 4186 04"
+                                ),
+                                P(cls="flex items-start")(
+                                    Span(cls="mr-2")("📍"),
+                                    Span()(
+                                        "87, 3rd Main, 4th Phase, Dollars Layout, JP Nagar 7th Phase, Bengaluru, Karnataka 560078")
+                                )
+                            ),
+
+                            # Social media column
+                            Div(cls="mb-8 md:mb-0")(
+                                H3(cls="text-lg font-medium mb-4")("Social media"),
+                                P(cls="flex items-center mb-2")(
+                                    Span(cls="mr-2")("📷"), "Instagram"
+                                ),
+                                P(cls="flex items-center mb-2")(
+                                    Span(cls="mr-2")("💼"), "LinkedIn"
+                                ),
+                                P(cls="flex items-center mb-2")(
+                                    Span(cls="mr-2")("🐦"), "Twitter"
+                                )
+                            ),
+
+                            # Legal column
+                            Div()(
+                                H3(cls="text-lg font-medium mb-4")("Legal"),
+                                P(cls="mb-2")("Terms and conditions"),
+                                P(cls="mb-2")("Privacy policy"),
+                                P(cls="mb-2")("Cookies policy")
+                            )
+                        ),
+
+                        # Copyright section
+                        Div(cls="container mx-auto px-4 mt-8 pt-4 border-t border-gray-300")(
+                            P(cls="text-sm text-gray-600")("The Mindful Initiative. All rights reserved.")
+                        )
+                    )
 
                 ),
 
