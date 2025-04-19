@@ -66,22 +66,22 @@ def get_homepage():
                     Div(cls="mt-16 w-full flex items-center justify-center gap-12 lg:gap-50")(
                         Div(cls="flex flex-col items-center justify-center")(
                             Img(cls="md:w-25 md:h-25 w-12 h-12", src='static/img/imagine-desktop.png', alt="imagine")(),
-                            P(cls="text-xs md:text-xl text-center text-slate-700")(
+                            P(cls="text-xs md:text-xl text-center text-[#004552]")(
                                 Span(cls="block")("Reimagining a"),
                                 Span(cls="block")("Mindful India")
                             ),
-                            P(cls="text-xs m-2 md:text-lg text-slate-600 text-center")(
+                            P(cls="text-xs m-2 md:text-lg text-[#004552] text-center")(
                                 Span(cls="block")("पुनर्नि र्निर्मा मः"),
                                 Span(cls="block")("मनस्वीं भारतम्")
                             )
                         ),
                         Div(cls="flex flex-col items-center justify-center")(
                             Img(cls="md:w-25 md:h-25 w-12 h-12", src='static/img/celebrate.svg', alt="celebrate")(),
-                            P(cls="text-xs md:text-xl text-center text-slate-700")(
+                            P(cls="text-xs md:text-xl text-center text-[#004552]")(
                                 Span(cls="block")("Celebrating"),
                                 Span(cls="block")("Our Heritage")
                             ),
-                            P(cls="text-xs md:text-lg text-slate-600 text-center m-2")(
+                            P(cls="text-xs md:text-lg text-[#004552] text-center m-2")(
                                 Span(cls="block")("उत्सवामः"),
                                 Span(cls="block")("स्वधर्म मंम")
                             )
@@ -89,11 +89,11 @@ def get_homepage():
                         Div(cls="flex flex-col items-center justify-center")(
                             Img(cls="md:w-25 md:h-25 w-12 h-12", src='static/img/cultivate-desktop.png',
                                 alt="cultivate")(),
-                            P(cls=" text-xs md:text-xl text-center text-slate-700")(
+                            P(cls=" text-xs md:text-xl text-center text-[#004552]")(
                                 Span(cls="block")("Cultivating"),
                                 Span(cls="block")("Inner Wisdom")
                             ),
-                            P(cls="text-xs md:text-lg text-slate-600 text-center m-2")(
+                            P(cls="text-xs md:text-lg text-[#004552] text-center m-2")(
                                 Span(cls="block")("अन्तः"),
                                 Span(cls="block")("प्रज्ञा संवर्धनम्"),
                             )
@@ -106,7 +106,7 @@ def get_homepage():
                         Div(cls="w-[370px] md:w-[1034px] flex flex-col items-center justify-center gap-10 content-center")(
                             H1(cls="font-heading font-[400px] text-[24px] md:text-[32px] text-center text-[#004552]")(
                                 "A Movement Rooted in Tradition"),
-                            P(cls="m-2 text-base text-[16px] md:text-[24px] text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                            P(cls="m-2 text-base text-[16px] md:text-[24px] text-center font-rest leading-relaxed text-[#006478] font-extralight")(
                                 B("Meditate for India", cls="font-bold font-rest md:text-[24px]"),
                                 " is more than just an event; it is a collective movement to bring India's ancient wisdom into modern life. The first Meditate for India was held during the ",
                                 B("COVID-19 pandemic, offering thousands a space for healing, "
@@ -114,14 +114,14 @@ def get_homepage():
                                   cls="font-bold font-rest md:text-[24px]"),
                             ),
 
-                            P(cls="m-2 text-[16px] md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                            P(cls="m-2 text-[16px] md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-extralight")(
                                 "Now, we come together again not in response to crisis, but as a ",
                                 B("step toward cultivating lasting well-being.",
                                   cls="font-bold font-rest md:text-[24px]"),
                                 " Meditation is not just an individual practice; "
                                 "it is a shared journey that uplifts communities and strengthens societies."
                             ),
-                            P(cls="m-2 text-[16px] md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-normal")(
+                            P(cls="m-2 text-[16px] md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-extralight")(
                                 "This year, Meditate for India will be held ",
                                 B("online and in-person ", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
                                 " across cities worldwide. Whether you join from ",
@@ -146,13 +146,13 @@ def get_homepage():
                     Div(cls="mt-16 w-384px md:w-[994px] flex flex-col items-center justify-center gap-10")(
                         H1(cls="font-heading text-2xl md:text-[64px] text-center text-[#004552]")(
                             "Wisdom Form Our Speakers"),
-                        P(cls="md:text-2xl text-[16px] text-center font-rest leading-relaxed text-[#006478] font-[400px]")(
+                        P(cls="md:text-2xl text-[16px] text-center font-rest leading-relaxed text-[#006478] font-extralight")(
                             "Discover the inspiring teachers and experts who will guide you through mindfulness, inner peace, and self-discovery"
                         )
                     ),
 
                     # Speakers section
-                    Div(cls="mt-40 container mx-auto px-4")(
+                    Div(cls="mt-16 md:mt-40 container mx-auto px-4")(
                         # Desktop layout (7 speakers) - hidden on mobile
                         Div(cls="hidden md:block")(
                             # First row - 4 speakers
@@ -161,8 +161,8 @@ def get_homepage():
                                     Div(cls="w-44 h-44 rounded-full overflow-hidden mb-4")(
                                         Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
                                     ),
-                                    P(cls="text-center font-[500px] text-xl text-[#006478] mb-1")("Sri Kunal Kendurkar"),
-                                    P(cls="text-center text-lg text-[#006478]")("Yoga Coach")
+                                    P(cls="text-center font-[500px] text-[24px] text-[#006478] mb-1")("Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-[24px] text-[#006478]")("Yoga Coach")
                                 ) for _ in range(4)],
                             ),
 
@@ -172,8 +172,8 @@ def get_homepage():
                                     Div(cls="w-44 h-44 rounded-full overflow-hidden mb-4")(
                                         Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
                                     ),
-                                    P(cls="text-center font-[500px] text-xl text-[#006478] mb-1")("Sri Kunal Kendurkar"),
-                                    P(cls="text-center text-lg text-[#006478]")("Yoga Coach")
+                                    P(cls="text-center font-[500px] text-[24px] text-[#006478] mb-1")("Sri Kunal Kendurkar"),
+                                    P(cls="text-center text-[24px] text-[#006478]")("Yoga Coach")
                                 ) for _ in range(3)],
                             ),
                         ),
@@ -186,9 +186,9 @@ def get_homepage():
                                     Div(cls="w-24 h-24 rounded-full overflow-hidden mb-2")(
                                         Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
                                     ),
-                                    P(cls="text-center font-[500px] text-sm text-[#006478] mb-0.5")(
+                                    P(cls="text-center font-[500px] text-[12px] text-[#006478] mb-0.5")(
                                         "Sri Kunal Kendurkar"),
-                                    P(cls="text-center text-xs text-[#006478]")("Yoga Coach")
+                                    P(cls="text-center text-[12px] text-[#006478]")("Yoga Coach")
                                 ) for _ in range(3)],
                             ),
 
@@ -198,9 +198,9 @@ def get_homepage():
                                     Div(cls="w-24 h-24 rounded-full overflow-hidden mb-2")(
                                         Img(src="static/img/speaker.png", cls="w-full h-full object-cover")
                                     ),
-                                    P(cls="text-center font-[500px] text-sm text-[#006478] mb-0.5")(
+                                    P(cls="text-center font-[500px] text-[12px] text-[#006478] mb-0.5")(
                                         "Sri Kunal Kendurkar"),
-                                    P(cls="text-center text-xs text-[#006478]")("Yoga Coach")
+                                    P(cls="text-center text-[12px] text-[#006478]")("Yoga Coach")
                                 ) for _ in range(2)],
                             ),
                         ),
@@ -210,11 +210,11 @@ def get_homepage():
                         Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/join-us-desktop.png',
                             alt="mfi-desktop"),
                         H1(cls="absolute text-center text-[64px] font-heading mt-60")("“Join Us”"),
-                        P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-normal mt-100")(
+                        P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-extralight mt-100")(
                             B("Online:"),
                             " Join live-streamed sessions from anywhere."
                         ),
-                        P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-normal mt-120")(
+                        P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-extralight mt-120")(
                             B("In-Person:"),
                             " Attend a gathering at a partner yoga shala or meditation center."
                         ),
