@@ -1,4 +1,6 @@
 from fasthtml.common import *
+from fasthtml.components import Raw
+
 
 hdrs = (
     Meta(name="viewport", content="width=device-width, initial-scale=1.0"),
@@ -11,37 +13,110 @@ hdrs = (
 
 app, rt = fast_app(hdrs=hdrs, pico=False, live=False)
 
+
+# --- Helper Functions & Components ---
+
 def meditation_button(additional_classes=""):
     """Helper function to avoid button style duplication"""
     base_classes = "bg-[#1DB0CD] hover:bg-[#19a0bb] text-white font-medium py-3 px-3 rounded-md transition duration-300 h-12 w-44 text-sm"
     return Button(cls=f"{base_classes} {additional_classes}")("Join Meditate for India")
 
+# --- Responsive Navbar Components ---
 
+def hamburger_button():
+    """Creates the hamburger button visible only on mobile."""
+    # SVG for hamburger icon
+    hamburger_icon = Img(src="/static/img/hamburger.svg", alt="Menu", cls="w-6 h-6")
+    # Button shown only below md breakpoint, triggers JS toggle function
+    return Button(hamburger_icon,
+                  cls="md:hidden p-2 text-gray-800 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500", # Added focus styles
+                  onclick="toggleMenu()") # Simple JS toggle
 
-navbar = Nav(cls="hidden bg-[#F4F8F9] shadow-sm py-4 md:flex border-0")(
-        Div(cls="mt-6 container m-0 flex justify-between min-w-full")(
-            # Left navigation items
-            Div(cls="px-6 flex bg-[#F4F8F9] space-x-8 ")(
-                A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-                A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-                A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-                A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-                A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-            ),
-            # Login link
-            A("Login/ Sign up", href="#", cls="text-gray-800 hover:text-blue-600 font-medium px-6")
-        )
+def mobile_menu():
+    """Creates the mobile navigation menu, hidden by default."""
+    # Define links for the mobile menu
+    links = [
+        A("Home", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Join the event", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Become a Partner", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("About Us", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("FAQ", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Login/ Sign up", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded")
+    ]
+    # Mobile menu container, hidden by default, absolutely positioned
+    return Div(*links,
+               id="mobile-menu",
+               # Initially hidden, shown only below md when toggled
+               cls="hidden md:hidden fixed top-16 left-0 right-0 bg-[#F4F8F9] shadow-md flex-col p-4 space-y-1 z-50") # Adjusted top, space-y
+
+def desktop_navbar():
+    """The original navbar, now specifically for desktop (md and up)."""
+    return Nav(cls="hidden md:flex space-x-8")( # Renamed variable, adjusted spacing
+        A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
     )
+
+# --- JavaScript for Toggle ---
+
+toggle_script = Script("""
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) { // Basic check if element exists
+           menu.classList.toggle('hidden');
+        }
+    }
+""")
+
+
+
+# navbar = Nav(cls="hidden bg-[#F4F8F9] shadow-sm py-4 md:flex border-0")(
+#         Div(cls="mt-6 container m-0 flex justify-between min-w-full")(
+#             # Left navigation items
+#             Div(cls="px-6 flex bg-[#F4F8F9] space-x-8 ")(
+#                 A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+#                 A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+#                 A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+#                 A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+#                 A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+#             ),
+#             # Login link
+#             A("Login/ Sign up", href="#", cls="text-gray-800 hover:text-blue-600 font-medium px-6")
+#         )
+#     )
 
 
 @rt("/")
 def get_homepage():
+    # Header container holds logo, desktop nav, and hamburger button
+    header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
+        # Added relative positioning for absolute mobile menu
+        Div(cls="container mx-auto flex justify-between items-center p-4")(  # Inner container for alignment
+            # Logo/Brand Name (visible on all screens)
+            # Div(A("Meditate For India", href="/", cls="text-xl font-bold text-[#004552]")),
+
+            # Desktop Navigation Links (hidden on mobile)
+            desktop_navbar(),
+
+            # Login Link for Desktop (hidden on mobile)
+            A("Login/ Sign up", href="#", cls="hidden md:block text-gray-800 hover:text-blue-600 font-medium"),
+
+            # Hamburger Button (visible on mobile)
+            hamburger_button()
+        ),
+        # The mobile menu itself, positioned absolutely below the header container
+          # [cite: 507, 521] This menu is toggled by hamburger_button's onclick
+    )
+
     return (
 
         Body()(
+            toggle_script,
             Main(
-
-                navbar,
+                header_container,
+                mobile_menu(),
                 Div(cls="w-full flex flex-col items-center justify-center mt-16")(
 
                     Div(cls="relative w-full flex flex-col items-center justify-center")(
