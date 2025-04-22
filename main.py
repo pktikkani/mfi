@@ -32,6 +32,64 @@ def hamburger_button():
                   cls="md:hidden p-2 text-gray-800 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500", # Added focus styles
                   onclick="toggleMenu()") # Simple JS toggle
 
+def footer():
+    return Div(cls="mt-16 hidden md:block w-full bg-[#F4F8F9] py-10 relative")(
+                        # Shadow element positioned at the top of the footer
+                        Div(cls="absolute top-0 left-0 right-0 h-4 shadow-[0_-2px_4px_rgba(0,0,0,0.1)] pointer-events-none"),
+
+                        Div(cls="container mx-auto px-4 flex flex-col md:flex-row justify-between")(
+                            # Left column - Brand and tagline
+                            Div(cls="mb-8 md:mb-0")(
+                                H2(cls="text-xl font-medium mb-2 text-gray-700")("The Mindful Initiative | Ashtanga Yoga"),
+                                P(cls="text-gray-700")("Helping People to be more Mindful and Compassionate Since 2017")
+                            ),
+
+                            # Center column - Contact information
+                            Div(cls="mb-8 md:mb-0")(
+                                H3(cls="text-lg font-medium mb-4")("Contact"),
+                                P(cls="flex items-center mb-2 text-gray-700")(
+                                    Span(cls="mr-2 text-gray-700")("✉️"), "info@themindfulinitiative.com"
+                                ),
+                                P(cls="flex items-center mb-2 text-gray-700")(
+                                    Span(cls="mr-2 text-gray-700")("📞"), "+91 9535 4186 04"
+                                ),
+                                P(cls="flex items-start")(
+                                    Span(cls="mr-2 ")("📍"),
+                                    Span(cls="text-gray-700")(
+                                        "87, 3rd Main, 4th Phase, Dollars Layout, JP Nagar 7th Phase, Bengaluru, Karnataka 560078")
+                                )
+                            ),
+
+                            # Social media column
+                            Div(cls="mb-8 md:mb-0")(
+                                H3(cls="text-lg font-medium mb-4 text-gray-700")("Social media"),
+                                P(cls="flex items-center mb-2 text-gray-700")(
+                                    Span(cls="mr-2 text-gray-700")("📷"), "Instagram"
+                                ),
+                                P(cls="flex items-center mb-2 text-gray-700")(
+                                    Span(cls="mr-2 text-gray-700")("💼"), "LinkedIn"
+                                ),
+                                P(cls="flex items-center mb-2 text-gray-700")(
+                                    Span(cls="mr-2 text-gray-700")("🐦"), "Twitter"
+                                )
+                            ),
+
+                            # Legal column
+                            Div()(
+                                H3(cls="text-lg font-medium mb-4")("Legal"),
+                                P(cls="mb-2 text-gray-700")("Terms and conditions"),
+                                P(cls="mb-2 text-gray-700")("Privacy policy"),
+                                P(cls="mb-2 text-gray-700")("Cookies policy")
+                            )
+                        ),
+
+                        # Copyright section
+                        Div(cls="container mx-auto px-4 mt-8 pt-4 border-t border-gray-300")(
+                            P(cls="text-sm text-gray-600")("The Mindful Initiative. All rights reserved.")
+                        )
+                    )
+
+
 def mobile_menu():
     """Creates the mobile navigation menu, hidden by default."""
     # Define links for the mobile menu
@@ -296,62 +354,7 @@ def get_homepage():
                         meditation_button("absolute hidden mt-160 md:block md:text-base md:w-52")
                     ),
 
-                    # Footer section with shadow at the top
-                    Div(cls="mt-16 hidden md:block w-full bg-[#F4F8F9] py-10 relative")(
-                        # Shadow element positioned at the top of the footer
-                        Div(cls="absolute top-0 left-0 right-0 h-4 shadow-[0_-2px_4px_rgba(0,0,0,0.1)] pointer-events-none"),
-
-                        Div(cls="container mx-auto px-4 flex flex-col md:flex-row justify-between")(
-                            # Left column - Brand and tagline
-                            Div(cls="mb-8 md:mb-0")(
-                                H2(cls="text-xl font-medium mb-2")("The Mindful Initiative | Ashtanga Yoga"),
-                                P(cls="text-gray-700")("Helping People to be more Mindful and Compassionate Since 2017")
-                            ),
-
-                            # Center column - Contact information
-                            Div(cls="mb-8 md:mb-0")(
-                                H3(cls="text-lg font-medium mb-4")("Contact"),
-                                P(cls="flex items-center mb-2")(
-                                    Span(cls="mr-2")("✉️"), "info@themindfulinitiative.com"
-                                ),
-                                P(cls="flex items-center mb-2")(
-                                    Span(cls="mr-2")("📞"), "+91 9535 4186 04"
-                                ),
-                                P(cls="flex items-start")(
-                                    Span(cls="mr-2")("📍"),
-                                    Span()(
-                                        "87, 3rd Main, 4th Phase, Dollars Layout, JP Nagar 7th Phase, Bengaluru, Karnataka 560078")
-                                )
-                            ),
-
-                            # Social media column
-                            Div(cls="mb-8 md:mb-0")(
-                                H3(cls="text-lg font-medium mb-4")("Social media"),
-                                P(cls="flex items-center mb-2")(
-                                    Span(cls="mr-2")("📷"), "Instagram"
-                                ),
-                                P(cls="flex items-center mb-2")(
-                                    Span(cls="mr-2")("💼"), "LinkedIn"
-                                ),
-                                P(cls="flex items-center mb-2")(
-                                    Span(cls="mr-2")("🐦"), "Twitter"
-                                )
-                            ),
-
-                            # Legal column
-                            Div()(
-                                H3(cls="text-lg font-medium mb-4")("Legal"),
-                                P(cls="mb-2")("Terms and conditions"),
-                                P(cls="mb-2")("Privacy policy"),
-                                P(cls="mb-2")("Cookies policy")
-                            )
-                        ),
-
-                        # Copyright section
-                        Div(cls="container mx-auto px-4 mt-8 pt-4 border-t border-gray-300")(
-                            P(cls="text-sm text-gray-600")("The Mindful Initiative. All rights reserved.")
-                        )
-                    )
+                    footer()
 
                 ),
 
