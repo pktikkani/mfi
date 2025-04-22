@@ -342,7 +342,7 @@ def get_homepage():
                     Div(cls="mt-16 w-full hidden md:flex flex-col items-center justify-center gap-10 relative")(
                         Img(cls="md:w-auto md:h-auto hidden md:block", src='static/img/join-us-desktop.png',
                             alt="mfi-desktop"),
-                        H1(cls="absolute text-center text-[64px] font-heading mt-60")("“Join Us”"),
+                        H1(cls="absolute text-center text-[64px] font-heading mt-60 text-[#006478]")("“Join Us”"),
                         P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-extralight mt-100")(
                             B("Online:"),
                             " Join live-streamed sessions from anywhere."
