@@ -96,7 +96,7 @@ def mobile_menu():
     # Define links for the mobile menu
     links = [
         A("Home", href="/", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("Join the event", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Join the event", href="/join-event", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("Become a Partner", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("About Us", href="/about-us", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("FAQ", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
