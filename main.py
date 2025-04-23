@@ -354,7 +354,8 @@ def about():
     # Define the main content for the About Us page
     # REMOVED min-h-full as flex-grow will handle expansion
     about_content = Div(cls="min-w-full max-w-2xl mx-auto px-4 py-8 md:py-16 flex flex-col justify-center items-center text-center mb-16 flex-grow")( # ADDED flex-grow
-        H1(cls="font-heading font-light text-[32px]  text-[#004552] mb-6")("The Mindful Initiative"),
+        Img(cls="mb-10", src='static/img/TMIlogo.png'),
+        # H1(cls="font-heading font-light text-[32px]  text-[#004552] mb-6")("The Mindful Initiative"),
         P(cls="font-rest text-[24px] font-light text-[#006478] leading-relaxed mb-4")(
             "Meditate for India is organized by The Mindful Initiative, an organization dedicated to integrating mindfulness, yoga, and contemplative practices into daily life."
         ),
