@@ -357,10 +357,13 @@ def about():
         Img(cls="mb-10", src='static/img/TMIlogo.png'),
         # H1(cls="font-heading font-light text-[32px]  text-[#004552] mb-6")("The Mindful Initiative"),
         P(cls="font-rest text-[24px] font-light text-[#006478] leading-relaxed mb-4")(
-            "Meditate for India is organized by The Mindful Initiative, an organization dedicated to integrating mindfulness, yoga, and contemplative practices into daily life."
+            Span(cls="block")("Meditate for India is organized by The Mindful Initiative, an organization"),
+                 Span(cls="block")("dedicated to integrating mindfulness, yoga, and contemplative"),
+                Span(cls="block")("practices into daily life.")
         ),
         P(cls="font-rest font-light text-[24px] text-[#006478] leading-relaxed mb-8")(
-            "Since 2017, we have created podcasts, workshops, and programs to make these ancient practices accessible and impactful."
+            Span(cls="block")("Since 2017, we have created podcasts, workshops, and programs to"),
+            Span(cls="block")("make these ancient practices accessible and impactful.")
         ),
         P(cls="font-rest text-lg md:text-xl text-[#006478] leading-relaxed")(B(
             "To learn more, visit: ",
