@@ -87,17 +87,18 @@ def footer():
                         Div(cls="container mx-auto px-4 mt-8 pt-4 border-t border-gray-300")(
                             P(cls="text-sm text-gray-600")("The Mindful Initiative. All rights reserved.")
                         )
-                    )
+    )
+
 
 
 def mobile_menu():
     """Creates the mobile navigation menu, hidden by default."""
     # Define links for the mobile menu
     links = [
-        A("Home", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Home", href="/", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("Join the event", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("Become a Partner", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("About Us", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("About Us", href="/about-us", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("FAQ", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("Login/ Sign up", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded")
     ]
@@ -110,10 +111,10 @@ def mobile_menu():
 def desktop_navbar():
     """The original navbar, now specifically for desktop (md and up)."""
     return Nav(cls="hidden md:flex space-x-8")( # Renamed variable, adjusted spacing
-        A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("Home", href="/", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("Join the event", href="/join-event", cls="text-gray-800 hover:text-blue-600 font-medium"),
         A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("About Us", href="/about-us", cls="text-gray-800 hover:text-blue-600 font-medium"),
         A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
     )
 
@@ -129,27 +130,7 @@ toggle_script = Script("""
 """)
 
 
-
-# navbar = Nav(cls="hidden bg-[#F4F8F9] shadow-sm py-4 md:flex border-0")(
-#         Div(cls="mt-6 container m-0 flex justify-between min-w-full")(
-#             # Left navigation items
-#             Div(cls="px-6 flex bg-[#F4F8F9] space-x-8 ")(
-#                 A("Home", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-#                 A("Join the event", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-#                 A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-#                 A("About Us", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-#                 A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-#             ),
-#             # Login link
-#             A("Login/ Sign up", href="#", cls="text-gray-800 hover:text-blue-600 font-medium px-6")
-#         )
-#     )
-
-
-@rt("/")
-def get_homepage():
-    # Header container holds logo, desktop nav, and hamburger button
-    header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
+header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
         # Added relative positioning for absolute mobile menu
         Div(cls="container mx-auto flex justify-between items-center p-4")(  # Inner container for alignment
             # Logo/Brand Name (visible on all screens)
@@ -164,9 +145,12 @@ def get_homepage():
             # Hamburger Button (visible on mobile)
             hamburger_button()
         ),
-        # The mobile menu itself, positioned absolutely below the header container
-          # [cite: 507, 521] This menu is toggled by hamburger_button's onclick
     )
+
+@rt("/")
+def get_homepage():
+    # Header container holds logo, desktop nav, and hamburger button
+
 
     return (
 
@@ -365,5 +349,75 @@ def get_homepage():
     )
 
 
+@rt("/about-us")
+def about():
+    # Define the main content for the About Us page
+    # REMOVED min-h-full as flex-grow will handle expansion
+    about_content = Div(cls="min-w-full max-w-2xl mx-auto px-4 py-8 md:py-16 flex flex-col justify-center items-center text-center mb-16 flex-grow")( # ADDED flex-grow
+        H1(cls="font-heading font-light text-[32px]  text-[#004552] mb-6")("The Mindful Initiative"),
+        P(cls="font-rest text-[24px] font-light text-[#006478] leading-relaxed mb-4")(
+            "Meditate for India is organized by The Mindful Initiative, an organization dedicated to integrating mindfulness, yoga, and contemplative practices into daily life."
+        ),
+        P(cls="font-rest font-light text-[24px] text-[#006478] leading-relaxed mb-8")(
+            "Since 2017, we have created podcasts, workshops, and programs to make these ancient practices accessible and impactful."
+        ),
+        P(cls="font-rest text-lg md:text-xl text-[#006478] leading-relaxed")(B(
+            "To learn more, visit: ",
+            A("https://www.themindfulinitiative.com",
+              href="https://www.themindfulinitiative.com",
+              target="_blank",
+              rel="noopener noreferrer",
+              cls="text-[#006478]")
+        )),
+    )
+
+    # Apply flex container classes directly to Body
+    return Body(cls="flex flex-col min-h-screen")( # CHANGED classes here
+        toggle_script,      # Child 1
+        header_container,   # Child 2
+        mobile_menu(),      # Child 3
+        about_content,      # Child 4 (This now has flex-grow)
+        footer()            # Child 5
+    )
+
+@rt("/join-event")
+def join():
+    join_content = Div(
+        cls="min-w-full max-w-2xl mx-auto px-4 py-8 md:py-16 flex flex-col items-center text-center justify-center mb-16 flex-grow")(
+        # ADDED flex-grow
+        Img(cls="mb-10", src='static/img/together.png'),
+        H1(cls="font-heading text-[32px] text-[#006478] mb-6 font-light")("Let’s Meditate for India."),
+        H1(cls="font-heading text-[32px] font-light text-[#006478] mb-6")("Let’s Meditate for Ourselves."),
+        P(cls="font-rest font-light text-[24px] text-lg md:text-[24px] text-[#006478] leading-relaxed mb-4")(
+            Span(cls="block")("The transformation of a nation begins from within. When we heal"),
+            Span(cls="block")(" ourselves, we heal our surroundings. When we meditate together, we"),
+            Span(cls="block")("create an unstoppable wave of clarity, peace, and well-being.")
+        ),
+
+        P(cls="mt-4 font-rest font-light text-[24px] text-lg md:text-[24px] text-[#006478] leading-relaxed mb-4")(
+            Span(cls="block")(
+                B(cls="font-bold")("Online:"),
+                " Join live-streamed sessions from anywhere."
+            ),
+            Span(cls="block")(
+                B(cls="font-bold")("In-Person:"),
+                " Attend a gathering at a partner yoga shala or meditation center."
+            ),
+        ),
+        Div(cls="flex items-center justify-center mb-16 gap-x-4")(
+            Button(cls="bg-[#1DB0CD] hover:bg-[#19a0bb] text-[14px] text-white font-medium rounded-md transition duration-300 h-12 w-30 text-sm")("Join in person"),
+            Button(cls="bg-white text-[#1DB0CD] font-light text-[14px] rounded-md transition duration-300 h-12 w-30 text-sm border-[#1DB0CD] border-1")("Join online")
+        )
+
+    )
+
+    # Apply flex container classes directly to Body
+    return Body(cls="flex flex-col min-h-screen")(  # CHANGED classes here
+        toggle_script,  # Child 1
+        header_container,  # Child 2
+        mobile_menu(),  # Child 3
+        join_content,  # Child 4 (This now has flex-grow)
+        footer()  # Child 5
+    )
 
 serve()
