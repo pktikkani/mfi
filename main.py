@@ -378,13 +378,13 @@ def mobile_menu():
     """Creates the mobile navigation menu, hidden by default."""
     # Define links for the mobile menu
     links = [
-        A("Home", href="/", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("Join the event", href="/join-event", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("About Us", href="/about-us", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("FAQ", href="/faq", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Home", href="/", cls="block py-2 px-4 text-[#004552] hover:text-[#004552] hover:bg-gray-200 rounded"),
+        A("Join the event", href="/join-event", cls="block py-2 px-4 text-[#004552] hover:text-[#004552] hover:bg-gray-200 rounded"),
+        A("About Us", href="/about-us", cls="block py-2 px-4 text-[#004552] hover:text-[#004552] hover:bg-gray-200 rounded"),
+        A("FAQ", href="/faq", cls="block py-2 px-4 text-[#004552] hover:text-[#004552] hover:bg-gray-200 rounded"),
         A("Login / Sign up",  # Changed text slightly for clarity
           # href="#", # Remove default href or set to javascript:void(0) if needed
-          cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded",  # Keep existing classes
+          cls="block py-2 px-4 text-[#004552] hover:text-[#004552] hover:bg-gray-200 rounded",  # Keep existing classes
           # Add HTMX attributes to trigger modal
           hx_get="/modal/join-online",
           hx_target="#modal-container",
@@ -420,36 +420,6 @@ toggle_script = Script("""
 """)
 
 
-# header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
-#         # Added relative positioning for absolute mobile menu
-#         Div(cls="container m-0 flex justify-between items-center p-4")(  # Inner container for alignment
-#             # Logo/Brand Name (visible on all screens)
-#             # Div(A("Meditate For India", href="/", cls="text-xl font-bold text-[#004552]")),
-#
-#             A(href="/")(
-#                         Img(src="/static/img/TMIlogo.png", # Path to your logo
-#                             alt="The Mindful Initiative Logo",
-#                             cls="h-8 w-auto") # Adjust height (h-8, h-10, etc.) as needed, width adjusts automatically
-#                     ),
-#
-#             # Desktop Navigation Links (hidden on mobile)
-#             # desktop_navbar(),
-#
-#             # Login Link for Desktop (hidden on mobile)
-#             A("Login / Sign up",  # Changed text slightly for clarity
-#               # href="#", # Remove default href or set to javascript:void(0) if needed
-#               cls="py-2 hidden md:block px-4 text-gray-800 rounded justify-end",  # Keep existing classes
-#               # Add HTMX attributes to trigger modal
-#               hx_get="/modal/join-online",
-#               hx_target="#modal-container",
-#               hx_swap="beforeend"
-#               ),
-#
-#             # Hamburger Button (visible on mobile)
-#             hamburger_button()
-#         ),
-#     )
-
 header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
     # Main container with padding and flex alignment
     Div(cls="container flex items-center p-4 m-0 min-w-full")( # Removed justify-between
@@ -470,7 +440,7 @@ header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
         # --- Login/Sign up Link (Pushed Right) ---
         # This is now separate and outside the grouping Div
         A("Login / Sign up",
-          cls="ml-auto hidden md:block text-gray-800 hover:text-blue-600 font-medium", # ml-auto pushes it right, hidden md:block for desktop only
+          cls="ml-auto hidden md:block text-[#004552] hover:text-[#004552] font-medium", # ml-auto pushes it right, hidden md:block for desktop only
           hx_get="/modal/join-online", # Keep the modal trigger
           hx_target="#modal-container",
           hx_swap="beforeend"
