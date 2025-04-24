@@ -274,7 +274,7 @@ def hamburger_button():
     # Button shown only below md breakpoint, triggers JS toggle function
     return Button(hamburger_icon,
                   id="hamburger-btn",
-                  cls="md:hidden p-2 text-gray-800 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500", # Added focus styles
+                  cls="md:hidden ml-auto p-2 text-gray-800 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500", # Added focus styles
                   onclick="toggleMenu()") # Simple JS toggle
 
 def footer():
@@ -420,35 +420,69 @@ toggle_script = Script("""
 """)
 
 
+# header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
+#         # Added relative positioning for absolute mobile menu
+#         Div(cls="container m-0 flex justify-between items-center p-4")(  # Inner container for alignment
+#             # Logo/Brand Name (visible on all screens)
+#             # Div(A("Meditate For India", href="/", cls="text-xl font-bold text-[#004552]")),
+#
+#             A(href="/")(
+#                         Img(src="/static/img/TMIlogo.png", # Path to your logo
+#                             alt="The Mindful Initiative Logo",
+#                             cls="h-8 w-auto") # Adjust height (h-8, h-10, etc.) as needed, width adjusts automatically
+#                     ),
+#
+#             # Desktop Navigation Links (hidden on mobile)
+#             # desktop_navbar(),
+#
+#             # Login Link for Desktop (hidden on mobile)
+#             A("Login / Sign up",  # Changed text slightly for clarity
+#               # href="#", # Remove default href or set to javascript:void(0) if needed
+#               cls="py-2 hidden md:block px-4 text-gray-800 rounded justify-end",  # Keep existing classes
+#               # Add HTMX attributes to trigger modal
+#               hx_get="/modal/join-online",
+#               hx_target="#modal-container",
+#               hx_swap="beforeend"
+#               ),
+#
+#             # Hamburger Button (visible on mobile)
+#             hamburger_button()
+#         ),
+#     )
+
 header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
-        # Added relative positioning for absolute mobile menu
-        Div(cls="container m-0 flex justify-between items-center p-4")(  # Inner container for alignment
-            # Logo/Brand Name (visible on all screens)
-            # Div(A("Meditate For India", href="/", cls="text-xl font-bold text-[#004552]")),
+    # Main container with padding and flex alignment
+    Div(cls="container flex items-center p-4 m-0 min-w-full")( # Removed justify-between
 
+        # --- Group Logo and Main Nav Links ---
+        Div(cls="flex items-center gap-x-8")( # Group logo and nav, add gap
+            # Logo Link
             A(href="/")(
-                        Img(src="/static/img/TMIlogo.png", # Path to your logo
-                            alt="The Mindful Initiative Logo",
-                            cls="h-8 w-auto") # Adjust height (h-8, h-10, etc.) as needed, width adjusts automatically
-                    ),
-
-            # Desktop Navigation Links (hidden on mobile)
-            desktop_navbar(),
-
-            # Login Link for Desktop (hidden on mobile)
-            A("Login / Sign up",  # Changed text slightly for clarity
-              # href="#", # Remove default href or set to javascript:void(0) if needed
-              cls="py-2 hidden md:block px-4 text-gray-800 rounded justify-end",  # Keep existing classes
-              # Add HTMX attributes to trigger modal
-              hx_get="/modal/join-online",
-              hx_target="#modal-container",
-              hx_swap="beforeend"
-              ),
-
-            # Hamburger Button (visible on mobile)
-            hamburger_button()
+                Img(src="/static/img/TMIlogo.png",
+                    alt="The Mindful Initiative Logo",
+                    cls="h-8 w-auto")
+            ),
+            # Desktop Navigation Links (Main Links Only)
+            desktop_navbar() # Function now returns only the main Nav
         ),
-    )
+        # --- End Group ---
+
+        # --- Login/Sign up Link (Pushed Right) ---
+        # This is now separate and outside the grouping Div
+        A("Login / Sign up",
+          cls="ml-auto hidden md:block text-gray-800 hover:text-blue-600 font-medium", # ml-auto pushes it right, hidden md:block for desktop only
+          hx_get="/modal/join-online", # Keep the modal trigger
+          hx_target="#modal-container",
+          hx_swap="beforeend"
+        ),
+        # --- End Login/Sign up Link ---
+
+        # Hamburger Button (Still needed for mobile)
+        # This should appear correctly on mobile as it's the last item flex pushes right by default if space allows,
+        # but the login link is hidden on mobile. If alignment issues occur on mobile, adjustments might be needed.
+        hamburger_button()
+    ),
+)
 
 @rt("/")
 def get_homepage():
@@ -457,7 +491,7 @@ def get_homepage():
 
     return (
 
-        Body()(
+        Body(cls="m-0")(
             toggle_script,
             Main(
                 header_container,
