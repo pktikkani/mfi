@@ -145,7 +145,7 @@ engine = get_engine(DATABASE_URL)
 
 def primary_button(text, **kwargs):
     """Creates a button with the primary color #1DB0CD and hover state."""
-    base_classes = "bg-[#1DB0CD] hover:bg-[#19a0bb] text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+    base_classes = "bg-[#1DB0CD] hover:bg-[#19a0bb] text-white font-semibold mb-4 p-2 rounded-md transition duration-300"
     # Combine base classes with any additional classes passed
     all_classes = f"{base_classes} {kwargs.pop('cls', '')}"
     return Button(text, cls=all_classes.strip(), **kwargs)
@@ -746,7 +746,7 @@ def add_online_participant(participant: OnlineParticipant):
 
             # --- RETURN CONFIRMATION STEP ---
             # This replaces the form inside the modal
-            confirmation_step = Div(id="modal-content", cls="text-center p-6")( # Target same ID
+            confirmation_step = Div(id="modal-content", cls="flex flex-col justify-center content-center text-center gap-y-4")( # Target same ID
                 H3("Confirm", cls="font-heading text-2xl text-[#004552] mb-4"),
                 P("You will be receiving a meeting link on the email id that you provided.",
                   cls="font-rest text-gray-700 mb-6"),
@@ -758,7 +758,7 @@ def add_online_participant(participant: OnlineParticipant):
                 ),
                 Button(  # Use standard secondary/gray button style
                     "Cancel",
-                    cls="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-md transition duration-300",
+                    cls="bg-gray-200 hover:bg-gray-300 mr-4 text-gray-700 font-medium p-2 rounded-md transition duration-300",
                     hx_get="/close-modal",
                     hx_target="#join-modal-container",
                     hx_swap="delete"  # Close modal directly
