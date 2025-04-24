@@ -1,6 +1,85 @@
+import logging
+from typing import Optional
+from datetime import datetime
 from fasthtml.common import *
-from fasthtml.components import Raw
+from sqlmodel import SQLModel, Field, create_engine, Session # Added SQLModel imports
+from sqlalchemy.exc import IntegrityError # To catch potential DB errors like duplicates
 
+def checkmark_svg():
+    """Returns an SVG checkmark icon using FastHTML Svg and Path components."""
+    return Svg( # The outer <svg> tag
+        Path( # The inner <path> tag
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", # The path data
+            stroke_linecap="round", # Path attributes
+            stroke_linejoin="round",
+            stroke_width="2"
+        ),
+        # Attributes for the <svg> tag itself
+        cls="w-16 h-16 text-green-500 mx-auto mb-4",
+        fill="none",
+        stroke="currentColor",
+        viewBox="0 0 24 24",
+        # xmlns="http://www.w3.org/2000/svg" # Svg component adds xmlns automatically
+    )
+
+toggle_script = Script("""
+    // Function to toggle the menu visibility
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) {
+           menu.classList.toggle('hidden');
+        }
+    }
+
+    // Add event listener to the whole document for clicks
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobile-menu');
+        const hamburgerButton = document.getElementById('hamburger-btn');
+
+        // If menu or button doesn't exist, do nothing
+        if (!menu || !hamburgerButton) {
+            return;
+        }
+
+        // Check if the menu is currently visible (doesn't have 'hidden' class)
+        const isMenuVisible = !menu.classList.contains('hidden');
+
+        // Check if the click target is the hamburger button or inside it
+        const isClickOnButton = hamburgerButton.contains(event.target);
+
+        // Check if the click target is inside the menu
+        const isClickInsideMenu = menu.contains(event.target);
+
+        // If the menu is visible AND the click was NOT on the button AND NOT inside the menu
+        if (isMenuVisible && !isClickOnButton && !isClickInsideMenu) {
+            // Hide the menu
+            menu.classList.add('hidden');
+        }
+    });
+""")
+
+
+close_modal_script = Script("""
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Ensure body exists before adding listener
+  if (document.body) {
+      document.body.addEventListener('closeModal', function(evt) {
+          console.log('closeModal event received, closing modal.'); // Optional: for debugging
+          const modal = document.getElementById('join-modal-container');
+          if (modal) {
+              // Add a fade-out effect before removing (optional)
+              modal.style.transition = 'opacity 0.5s ease-out';
+              modal.style.opacity = '0';
+              setTimeout(() => { modal.remove(); }, 500); // Remove after fade
+          } else {
+              console.log('Modal container #join-modal-container not found'); // Optional: for debugging
+          }
+      });
+  } else {
+      console.error('Document body not found when trying to attach closeModal listener.');
+  }
+});
+""")
 
 hdrs = (
     Meta(name="viewport", content="width=device-width, initial-scale=1.0"),
@@ -9,17 +88,182 @@ hdrs = (
         content="Fun and enriching yoga summer camp for kids in Bangalore. Combining mindfulness, movement, and play to nurture children's physical and emotional wellbeing. Ages 5-12."
     ),
     Link(rel="stylesheet", href="/static/output.css", type="text/css"),
+    close_modal_script,
+    toggle_script
 )
 
 app, rt = fast_app(hdrs=hdrs, pico=False, live=False)
 
+# --- Database Model & Setup ---
+
+# Define the model for online participants
+class OnlineParticipant(SQLModel, table=True):
+    __tablename__ = "online_participants" # Give it a distinct name
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    address: Optional[str] = Field(default=None) # Optional address field
+    email: str = Field(unique=True, index=True)  # Ensure email is unique
+    phone: str
+    created_at: datetime = Field(default_factory=datetime.now)
+    # Add __table_args__ if you need to support modifications on existing tables
+    __table_args__ = ({'extend_existing': True},)
+
+
+# --- Database Setup Functions (provided by you) ---
+def init_db(engine): # Pass engine to init_db
+    SQLModel.metadata.create_all(engine, checkfirst=True)
+
+def get_engine(database_url: str):
+    # Production settings
+    db_engine = create_engine(
+        database_url,
+        echo=False, # Set to True for debugging SQL queries
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10
+    )
+    logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
+    return db_engine
+
+# --- Database Initialization ---
+# Make sure this environment variable is set where you run the app
+DATABASE_URL = os.getenv("POSTGRES_MFI", "sqlite:///./default_mfi.db") # Provide a default SQLite DB for easy testing
+
+if not DATABASE_URL:
+    print("Warning: POSTGRES_MFI environment variable not set. Using default SQLite DB.")
+    # Optionally raise an error if PostgreSQL is strictly required:
+    # raise ValueError("POSTGRES_SCAMP_URL environment variable is required")
+
+engine = get_engine(DATABASE_URL)
+
+# --- End Database Model & Setup ---
+
+
 
 # --- Helper Functions & Components ---
+
+def primary_button(text, **kwargs):
+    """Creates a button with the primary color #1DB0CD and hover state."""
+    base_classes = "bg-[#1DB0CD] hover:bg-[#19a0bb] text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+    # Combine base classes with any additional classes passed
+    all_classes = f"{base_classes} {kwargs.pop('cls', '')}"
+    return Button(text, cls=all_classes.strip(), **kwargs)
+
+def join_online_modal():
+    """Creates the modal popup using DaisyUI classes like the Attendance Form."""
+    modal_container = Div(
+        # Backdrop (Standard Tailwind)
+        Div(cls="fixed inset-0 backdrop-blur-sm bg-white/30 z-[90]",
+            hx_get="/close-modal", hx_target="#join-modal-container", hx_swap="delete"),
+        # Centering wrapper (Standard Tailwind)
+        Div(cls="fixed inset-0 z-[100] flex items-center justify-center p-4")(
+            # Modal Box (Using DaisyUI Card Style)
+            Div(cls="card flex-shrink-0 w-full md:max-w-[647px] shadow-lg backdrop-blur-lg bg-white/70 rounded-lg border border-white/30 relative")( # Card classes from example
+                # Close button (Standard Tailwind, positioned relative to card)
+                Button("×",
+                       cls="absolute top-2 right-3 text-[#1DB0CD] hover:text-[#19a0bb] opacity-70 hover:opacity-100 text-2xl font-bold", # Use base-content for text
+                       hx_get="/close-modal", hx_target="#join-modal-container", hx_swap="delete"),
+                # Modal Content Area / Card Body
+                Div(id="modal-content", cls="card-body")( # Added card-body class
+                     # --- Registration Form (Using DaisyUI Form Control/Input/Button Styles) ---
+                    Form(
+                        # Name Input
+                        Div(cls="form-control")( # form-control class
+                            Label(cls="label")( # label class
+                                Span("Name", cls="label-text") # label-text class
+                            ),
+                            Input(type="text", id="name", name="name", required=True, placeholder="Enter Name...",
+                                  cls="input input-bordered w-full") # input input-bordered classes
+                        ),
+                        # Address Input (Optional)
+                        Div(cls="form-control mt-4")( # form-control and margin
+                            Label(cls="label")(
+                                Span("Address (Optional)", cls="label-text")
+                            ),
+                            Input(type="text", id="address", name="address", placeholder="Enter Address...",
+                                  cls="input input-bordered w-full") # input input-bordered classes
+                        ),
+                        # Email Input
+                        Div(cls="form-control mt-4")( # form-control and margin
+                            Label(cls="label")(
+                                Span("Email", cls="label-text")
+                            ),
+                            Input(type="email", id="email", name="email", required=True, placeholder="Enter Email...",
+                                 cls="input input-bordered w-full") # input input-bordered classes
+                        ),
+                        # Phone Input
+                        Div(cls="form-control mt-4")( # form-control and margin
+                            Label(cls="label")(
+                                Span("Phone no", cls="label-text")
+                            ),
+                            Input(type="tel", id="phone", name="phone", required=True, placeholder="Enter Phone Number...",
+                                  cls="input input-bordered w-full") # input input-bordered classes
+                        ),
+                        # Submit Button
+                        Div(cls="form-control mt-6")( # form-control and margin
+                            primary_button("Continue", type="submit",
+                                   # Use btn and btn-primary from DaisyUI, make it full width
+                                   cls="w-full")
+                        ),
+                        # HTMX attributes
+                        hx_post="/participants/online",
+                        hx_target="#modal-content",
+                        hx_swap="innerHTML"
+                    )
+                    # --- End Registration Form ---
+                ) # End #modal-content / card-body
+            ) # End Modal Box / card
+        ), # End Centering wrapper
+        id="join-modal-container"
+    )
+    return modal_container
+
+def registration_success_message(name, email):
+    """Generates the final success message Div styled like the screenshot."""
+    # Main container for the success message content
+    return Div(id="modal-content", cls="text-center")( # Use padding from card-body
+        # Checkmark Icon
+        checkmark_svg(), # Assumes checkmark_svg() produces the desired icon/styling
+
+        # Heading
+        H3("Registration successful!!",
+           cls="font-heading text-2xl md:text-3xl text-[#004552] mb-4"), # Center alignment is inherited
+
+        # Paragraph 1
+        P(cls="font-rest text-base md:text-lg text-[#004552] mb-3")(
+            "Thank you! You have successfully registered for ", B("Meditate for India."), " We are eager to host you!"
+        ),
+
+        # Paragraph 2 with email
+        P(cls="font-rest text-base md:text-lg text-[#004552] mb-6")(
+             "We have sent you an email on ", B(email), " that has the event meeting link and other required details."
+        ),
+        # Note: No button, auto-close is handled by HX-Trigger from the route
+    )
+
+
+def registration_error_message(message_text):
+    """Generates an error message Div."""
+    return Div(id="modal-content", cls="text-center p-4 text-red-600")( # Target the same ID
+        H3("Registration Failed", cls="font-heading text-xl mb-4"),
+        P(message_text, cls="font-rest mb-6"),
+        Button("Close",
+                cls="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md transition duration-300",
+                hx_get="/close-modal",
+                hx_target="#join-modal-container",
+                hx_swap="delete")
+    )
+
 
 def meditation_button(additional_classes=""):
     """Helper function to avoid button style duplication"""
     base_classes = "bg-[#1DB0CD] hover:bg-[#19a0bb] text-white font-medium py-3 px-3 rounded-md transition duration-300 h-12 w-44 text-sm"
-    return Button(cls=f"{base_classes} {additional_classes}")("Join Meditate for India")
+    return Button(cls=f"{base_classes} {additional_classes}",
+                  hx_get = "/modal/join-online",  # Fetch modal content from this endpoint
+                  hx_target = "#modal-container",  # Append modal to the body
+                  hx_swap = "beforeend"  # Add it at the end
+                  )("Join Meditate for India")
 
 # --- Responsive Navbar Components ---
 
@@ -29,6 +273,7 @@ def hamburger_button():
     hamburger_icon = Img(src="/static/img/hamburger.svg", alt="Menu", cls="w-6 h-6")
     # Button shown only below md breakpoint, triggers JS toggle function
     return Button(hamburger_icon,
+                  id="hamburger-btn",
                   cls="md:hidden p-2 text-gray-800 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500", # Added focus styles
                   onclick="toggleMenu()") # Simple JS toggle
 
@@ -89,6 +334,44 @@ def footer():
                         )
     )
 
+# You can place this function definition alongside your other component functions
+
+def faq_accordion_item(question: str, answer: Any, faq_id: str):
+    """Creates a single DaisyUI collapse item for the FAQ accordion."""
+    return Div(cls="collapse collapse-arrow bg-base-100 shadow-md mb-3 rounded-lg border border-base-300")( # Added border/shadow
+        # Use radio input for accordion behavior (only one open at a time)
+        Input(type="checkbox", name="faq_id", id=faq_id), # Need unique ID for label
+        # The visible question part (acts as label for radio)
+        Label(cls="collapse-title text-lg md:text-xl font-medium font-rest text-[#004552] cursor-pointer", _for=faq_id)( # Use Label for accessibility
+            question
+        ),
+        # The hidden answer part
+        Div(cls="collapse-content font-rest text-gray-700 px-4 md:px-6 pb-4")( # Add padding
+            P(answer) # Wrap answer in P for consistent spacing
+        )
+    )
+
+def faq_content():
+    """Generates the main content for the FAQ page."""
+    faqs = [
+        ("What is Meditate for India?",
+         "It's a free, global 24-hour immersion event featuring Meditation, Pranayama, Asana, and Chanting. It aims to bring India's ancient wisdom into modern life and foster collective well-being."),
+        ("When is the event?",
+         "The main event is scheduled for June 21st, 2025. Specific timings for sessions will be announced closer to the date."),
+        ("How can I participate?",
+         Span("You can join ", B("online")," from anywhere through live-streamed sessions. Please visit the 'Join Event' page to register .")),
+        ("Who is organizing this?",
+         Span("Meditate for India is organized by ", A("The Mindful Initiative", href="/about-us", cls="link link-hover text-[#1DB0CD]"), ", an organization dedicated to integrating mindfulness, yoga, and contemplative practices into daily life since 2017.")),
+        ("Is this the first Meditate for India event?",
+         "No, the first Meditate for India was held during the COVID-19 pandemic, offering thousands a space for healing, resilience, and connection. This event continues the movement as a proactive step toward cultivating lasting well-being, rather than just in response to a crisis."),
+        ("What is the purpose or goal?",
+         "It's a collective movement focused on three core pillars: Reimagining a Mindful India, Celebrating Our Heritage, and Cultivating Inner Wisdom through shared practice.")
+    ]
+
+    return Div(cls="max-w-3xl mx-auto")( # Container for the accordion items
+        *[faq_accordion_item(q, a, f"faq-{i}") for i, (q, a) in enumerate(faqs)]
+    )
+
 
 
 def mobile_menu():
@@ -97,11 +380,18 @@ def mobile_menu():
     links = [
         A("Home", href="/", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("Join the event", href="/join-event", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("Become a Partner", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
         A("About Us", href="/about-us", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("FAQ", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
-        A("Login/ Sign up", href="#", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded")
+        A("FAQ", href="/faq", cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded"),
+        A("Login / Sign up",  # Changed text slightly for clarity
+          # href="#", # Remove default href or set to javascript:void(0) if needed
+          cls="block py-2 px-4 text-gray-800 hover:bg-gray-200 rounded",  # Keep existing classes
+          # Add HTMX attributes to trigger modal
+          hx_get="/modal/join-online",
+          hx_target="#modal-container",
+          hx_swap="beforeend"
+          ),
     ]
+
     # Mobile menu container, hidden by default, absolutely positioned
     return Div(*links,
                id="mobile-menu",
@@ -111,11 +401,11 @@ def mobile_menu():
 def desktop_navbar():
     """The original navbar, now specifically for desktop (md and up)."""
     return Nav(cls="hidden md:flex space-x-8")( # Renamed variable, adjusted spacing
-        A("Home", href="/", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("Join the event", href="/join-event", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("Become a Partner", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("About Us", href="/about-us", cls="text-gray-800 hover:text-blue-600 font-medium"),
-        A("FAQ", href="#", cls="text-gray-800 hover:text-blue-600 font-medium"),
+        A("Home", href="/", cls="text-gray-800 hover:text-[#004552] font-medium"),
+        A("Join the event", href="/join-event", cls="text-gray-800 hover:text-[#004552] font-medium"),
+        A("About Us", href="/about-us", cls="text-gray-800 hover:text-[#004552] font-medium"),
+        A("FAQ", href="/faq", cls="text-gray-800 hover:text-[#004552] font-medium"),
+
     )
 
 # --- JavaScript for Toggle ---
@@ -132,15 +422,28 @@ toggle_script = Script("""
 
 header_container = Div(cls="bg-[#F4F8F9] shadow-sm")(
         # Added relative positioning for absolute mobile menu
-        Div(cls="container mx-auto flex justify-between items-center p-4")(  # Inner container for alignment
+        Div(cls="container m-0 flex justify-between items-center p-4")(  # Inner container for alignment
             # Logo/Brand Name (visible on all screens)
             # Div(A("Meditate For India", href="/", cls="text-xl font-bold text-[#004552]")),
+
+            A(href="/")(
+                        Img(src="/static/img/TMIlogo.png", # Path to your logo
+                            alt="The Mindful Initiative Logo",
+                            cls="h-8 w-auto") # Adjust height (h-8, h-10, etc.) as needed, width adjusts automatically
+                    ),
 
             # Desktop Navigation Links (hidden on mobile)
             desktop_navbar(),
 
             # Login Link for Desktop (hidden on mobile)
-            A("Login/ Sign up", href="#", cls="hidden md:block text-gray-800 hover:text-blue-600 font-medium"),
+            A("Login / Sign up",  # Changed text slightly for clarity
+              # href="#", # Remove default href or set to javascript:void(0) if needed
+              cls="py-2 hidden md:block px-4 text-gray-800 rounded justify-end",  # Keep existing classes
+              # Add HTMX attributes to trigger modal
+              hx_get="/modal/join-online",
+              hx_target="#modal-container",
+              hx_swap="beforeend"
+              ),
 
             # Hamburger Button (visible on mobile)
             hamburger_button()
@@ -159,6 +462,7 @@ def get_homepage():
             Main(
                 header_container,
                 mobile_menu(),
+                Div(id="modal-container"),
                 Div(cls="w-full flex flex-col items-center justify-center mt-16")(
 
                     Div(cls="relative w-full flex flex-col items-center justify-center")(
@@ -240,7 +544,7 @@ def get_homepage():
                             ),
                             P(cls="m-2 text-[16px] md:text-[24px] text-base text-center font-rest leading-relaxed text-[#006478] font-extralight")(
                                 "This year, Meditate for India will be held ",
-                                B("online and in-person ", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
+                                B("online ", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
                                 " across cities worldwide. Whether you join from ",
                                 B("home, a yoga Shala,", cls="font-bold font-rest md:text-[24px] leading-relaxed"),
                                 "or a meditation center, you will be part of a global wave of stillness, breath, and sound."
@@ -331,10 +635,6 @@ def get_homepage():
                             B("Online:"),
                             " Join live-streamed sessions from anywhere."
                         ),
-                        P(cls="absolute text-center font-rest leading-relaxed text-2xl text-[#006478] font-extralight mt-120")(
-                            B("In-Person:"),
-                            " Attend a gathering at a partner yoga shala or meditation center."
-                        ),
                         meditation_button("absolute hidden mt-160 md:block md:text-base md:w-52")
                     ),
 
@@ -403,14 +703,13 @@ def join():
                 B(cls="font-bold")("Online:"),
                 " Join live-streamed sessions from anywhere."
             ),
-            Span(cls="block")(
-                B(cls="font-bold")("In-Person:"),
-                " Attend a gathering at a partner yoga shala or meditation center."
-            ),
         ),
         Div(cls="flex items-center justify-center mb-16 gap-x-4")(
-            Button(cls="bg-[#1DB0CD] hover:bg-[#19a0bb] text-[14px] text-white font-medium rounded-md transition duration-300 h-12 w-30 text-sm")("Join in person"),
-            Button(cls="bg-white text-[#1DB0CD] font-light text-[14px] rounded-md transition duration-300 h-12 w-30 text-sm border-[#1DB0CD] border-1")("Join online")
+            Button(cls="bg-[#1DB0CD] hover:bg-[#19a0bb] font-light text-[14px] rounded-md transition duration-300 h-12 w-30 text-sm border-[#1DB0CD] border-1",
+                    hx_get = "/modal/join-online",  # Fetch modal content from this endpoint
+                    hx_target = "#modal-container",  # Append modal to the body
+                    hx_swap = "beforeend"  # Add it at the end
+                   )("Join online")
         )
 
     )
@@ -420,8 +719,93 @@ def join():
         toggle_script,  # Child 1
         header_container,  # Child 2
         mobile_menu(),  # Child 3
+        Div(id="modal-container"),
         join_content,  # Child 4 (This now has flex-grow)
         footer()  # Child 5
     )
 
+# --- New Routes for Modal and Form Handling ---
+
+@rt("/modal/join-online")
+def get_join_modal():
+    """Route to serve the join online modal HTML."""
+    return join_online_modal()
+
+@rt("/participants/online")
+def add_online_participant(participant: OnlineParticipant):
+    """Handles submission, saves data, and returns the confirmation step."""
+    try:
+        with Session(engine) as session:
+            session.add(participant)
+            session.commit()
+            session.refresh(participant)
+
+            # --- RETURN CONFIRMATION STEP ---
+            # This replaces the form inside the modal
+            confirmation_step = Div(id="modal-content", cls="text-center p-6")( # Target same ID
+                H3("Confirm", cls="font-heading text-2xl text-[#004552] mb-4"),
+                P("You will be receiving a meeting link on the email id that you provided.",
+                  cls="font-rest text-gray-700 mb-6"),
+                primary_button( # Use the helper for styling
+                    "Confirm",
+                    hx_get=f"/registration-confirmed?name={participant.name}&email={participant.email}", # Pass name for final message
+                    hx_target="#modal-content",  # Target same content area
+                    hx_swap="innerHTML"         # Replace confirmation with success message
+                ),
+                Button(  # Use standard secondary/gray button style
+                    "Cancel",
+                    cls="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-md transition duration-300",
+                    hx_get="/close-modal",
+                    hx_target="#join-modal-container",
+                    hx_swap="delete"  # Close modal directly
+                )
+            )
+            return confirmation_step
+            # --- END CONFIRMATION STEP ---
+
+    except IntegrityError:
+        return registration_error_message("An account with this email address already exists.")
+    except Exception as e:
+        logging.error(f"Error saving participant: {e}")
+        return registration_error_message("Something went wrong. Please try again later.")
+
+@rt("/registration-confirmed")
+def show_confirmation(name: str = "Participant", email: str = "your email"): # Add email parameter
+    """Returns the final registration success message and triggers auto-close."""
+    success_content = registration_success_message(name, email)
+
+    # Define HX-Trigger header to fire 'closeModal' event after 20 seconds
+    # Note: Use trigger_after_settle to ensure content is rendered first
+    headers = HtmxResponseHeaders(trigger_after_settle='{"closeModal": "" }', trigger_delay='20s')
+
+    # Return the content AND the header
+    return success_content
+
+
+@rt("/faq")
+def faq_page():
+    """Renders the FAQ page."""
+
+    page_content = Div(cls="container mx-auto px-4 py-8 md:py-16 flex-grow")( # Use flex-grow to push footer down
+        H1("Frequently Asked Questions", cls="font-heading text-3xl md:text-4xl text-[#004552] mb-8 text-center"),
+        faq_content() # Include the accordion content generated above
+    )
+
+    # Structure the page using existing components + new content
+    return Body(cls="flex flex-col min-h-screen")(
+        toggle_script,
+        header_container, # Your existing header
+        mobile_menu(),    # Your existing mobile menu (now with FAQ link)
+        Div(id="modal-container"), # Keep the modal container
+        page_content,     # The FAQ content defined above
+        footer()          # Your existing footer
+    )
+
+@rt("/close-modal")
+def close_modal():
+    """Route to handle closing the modal. Returns empty response because HTMX handles deletion."""
+    return "" # Return empty string, HTMX swap="delete" handles removal
+
+# --- End New Routes ---
+init_db(engine)
 serve()

@@ -3,3 +3,4 @@ __pycache__
 .venv
 node_modules
 static/output.css
+default_mfi.db
