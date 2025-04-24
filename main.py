@@ -758,7 +758,7 @@ def add_online_participant(participant: OnlineParticipant):
                 ),
                 Button(  # Use standard secondary/gray button style
                     "Cancel",
-                    cls="bg-gray-200 hover:bg-gray-300 mr-4 text-gray-700 font-medium p-2 rounded-md transition duration-300",
+                    cls="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium p-2 rounded-md transition duration-300",
                     hx_get="/close-modal",
                     hx_target="#join-modal-container",
                     hx_swap="delete"  # Close modal directly
